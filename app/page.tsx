@@ -65,10 +65,12 @@ export default function Home() {
     e.preventDefault();
     await hashAndUploadFile();
   };
+
   const connectWallet = async () => {
     const { solana } = window as any;
     setWalletKey((await solana.connect()).publicKey);
   };
+  
   const initialize = async () => {
     const { solana } = window as any;
     const connection = new Connection(clusterApiUrl("devnet"));
