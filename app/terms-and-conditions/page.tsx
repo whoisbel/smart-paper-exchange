@@ -14,7 +14,7 @@ export default function Home() {
         <section className="mb-6">
           <h2 className="text-xl font-bold mb-2">1. Acceptance of Terms</h2>
           <p>
-            By using SPEX's services, you agree to comply with and be bound by
+            By using SPEX&lsquo;s services, you agree to comply with and be bound by
             these terms and conditions. If you do not agree to these terms,
             please do not use our services.
           </p>
@@ -75,22 +75,22 @@ export default function Home() {
           </p>
         </section>
         <section className="mb-6">
-        <h2 className="text-xl font-bold mb-2">9. Blockchain Storage</h2>
-        <p>
-          To ensure the immutability of certain data, SPEX may utilize
-          blockchain technology to store and timestamp certain information.
-          Once data is stored on the blockchain, it becomes tamper-resistant,
-          providing an additional layer of security and transparency. Users
-          acknowledge and agree that specific details, such as transaction
-          records and document authenticity, may be recorded on the blockchain.
-        </p>
-        <p>
-          It's important to note that while blockchain provides enhanced
-          security, SPEX reserves the right to comply with applicable laws and
-          regulations that may require the removal or modification of certain
-          information.
-        </p>
-      </section>
+          <h2 className="text-xl font-bold mb-2">9. Blockchain Storage</h2>
+          <p>
+            To ensure the immutability of certain data, SPEX may utilize
+            blockchain technology to store and timestamp certain information.
+            Once data is stored on the blockchain, it becomes tamper-resistant,
+            providing an additional layer of security and transparency. Users
+            acknowledge and agree that specific details, such as transaction
+            records and document authenticity, may be recorded on the blockchain.
+          </p>
+          <p>
+            It&lsquo;s important to note that while blockchain provides enhanced
+            security, SPEX reserves the right to comply with applicable laws and
+            regulations that may require the removal or modification of certain
+            information.
+          </p>
+        </section>
         <section className="mb-6">
           <h2 className="text-xl font-bold mb-2">8. Contact Information</h2>
           <p>

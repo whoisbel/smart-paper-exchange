@@ -1,13 +1,14 @@
 import Link from "next/link";
+import Image from 'next/image'
 
 export default function AboutUs() {
   return (
     <div className="max-w-2xl mx-auto p-6">
       <header className="mb-8 flex items-center justify-between">
         <Link href="/">
-            <h1 className="text-4xl font-bold text-blue-500">
-              Smart Paper Exchange (SPEX)
-            </h1>
+          <h1 className="text-4xl font-bold text-blue-500">
+            Smart Paper Exchange (SPEX)
+          </h1>
         </Link>
       </header>
 
@@ -27,7 +28,7 @@ export default function AboutUs() {
           transparent, tamper-resistant, and verifiable.
         </p>
         <p className="text-gray-600 mb-4">
-          Solana's high-performance blockchain not only enhances the security of our
+          Solana&apos;s high-performance blockchain not only enhances the security of our
           platform but also enables us to offer users an affordable and swift
           experience. With transaction costs often less than a dollar, SPEX
           prioritizes accessibility without compromising on security and
@@ -39,9 +40,11 @@ export default function AboutUs() {
         <h2 className="text-3xl font-bold mb-4">Our Team</h2>
         <div className="flex flex-col space-y-4">
           <div className="flex items-center">
-            <img
+            <Image
               src="https://placekitten.com/50/50"
-              alt="Team Member"
+              alt="Team member"
+              width={40}
+              height={40}
               className="w-10 h-10 rounded-full mr-4"
             />
             <div>
@@ -55,7 +58,7 @@ export default function AboutUs() {
       <section>
         <h2 className="text-3xl font-bold mb-4">Contact Us</h2>
         <p className="text-gray-600 mb-4">
-          Have questions or suggestions? We'd love to hear from you! Reach out to
+          Have questions or suggestions? We&apos;d love to hear from you! Reach out to
           us at{' '}
           <a href="mailto:info@spex.com" className="text-blue-500 hover:underline">
             info@spex.com
