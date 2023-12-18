@@ -90,7 +90,7 @@ export default function Home() {
     });
     const PROGRAM_SOLANA = new Program(
       JSON.parse(JSON.stringify(idl)),
-      new PublicKey("9mmw8L39tC2tveMZCii6bucbHJSuwuudoEC1g6Fn317G"),
+      new PublicKey("6DBdtVknkP5qE4jYSBdhrnUjZchpXJMNJhk2DeR7Rwvb"),
       anchor_provider
     );
     const allDocuments = await PROGRAM_SOLANA.account.document.all();
@@ -105,7 +105,7 @@ export default function Home() {
     });
     const PROGRAM_SOLANA = new Program(
       JSON.parse(JSON.stringify(idl)),
-      new PublicKey("9mmw8L39tC2tveMZCii6bucbHJSuwuudoEC1g6Fn317G"),
+      new PublicKey("6DBdtVknkP5qE4jYSBdhrnUjZchpXJMNJhk2DeR7Rwvb"),
       anchor_provider
     );
     const keyPair = web3.Keypair.generate();
@@ -259,6 +259,7 @@ export default function Home() {
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
                   className="w-full p-2 border border-gray-300 rounded mb-2"
+                  required
                 >
                   <option value="" disabled>
                     Select a category
