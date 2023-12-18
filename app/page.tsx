@@ -318,7 +318,7 @@ export default function Home() {
           {documents.map((e) => (
             <div key={e.publicKey} className="p-4 border rounded">
               <p className="text-lg font-bold mb-2 line-clamp-2">{e.account.owner.toString()}</p>
-              <p className="text-3xl mb-2 line-clamp-2 text-center font-bold">{e.account.title}</p>
+              <p className="text-3xl mb-2 text-center font-bold">{e.account.title}</p>
               {e.account.ext === 'docx' && (
                 <div className="mb-2 flex items-center justify-center">
                   <Image src={docx} alt="docx" width={300} height={250} />
