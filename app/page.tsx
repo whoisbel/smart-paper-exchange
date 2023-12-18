@@ -242,6 +242,7 @@ export default function Home() {
                 <input
                   type="text"
                   placeholder="Title"
+                  maxLength={20}
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   className="w-full p-2 border border-gray-300 rounded mb-2"
