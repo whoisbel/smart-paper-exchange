@@ -319,7 +319,6 @@ export default function Home() {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {documents.map((e) => (
             <div key={e.publicKey} className="p-4 border rounded">
-              <p className="text-lg font-bold mb-2 line-clamp-2">{e.account.owner.toString()}</p>
               <p className="text-3xl mb-2 text-center font-bold">{e.account.title}</p>
               {e.account.ext === 'docx' && (
                 <div className="mb-2 flex items-center justify-center">
