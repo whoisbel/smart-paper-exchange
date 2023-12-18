@@ -37,6 +37,14 @@
         {
           "name": "category",
           "type": "string"
+        },
+        {
+          "name": "description",
+          "type": "string"
+        },
+        {
+          "name": "ext",
+          "type": "string"
         }
       ]
     }
@@ -62,12 +70,20 @@
           {
             "name": "category",
             "type": "string"
+          },
+          {
+            "name": "description",
+            "type": "string"
+          },
+          {
+            "name": "ext",
+            "type": "string"
           }
         ]
       }
     }
   ],
   "metadata": {
-    "address": "2Bgqzs3vwWQaXF1KTPHyzJzAM7eFC8tyx8eo7aDydtt2"
+    "address": "9mmw8L39tC2tveMZCii6bucbHJSuwuudoEC1g6Fn317G"
   }
 }

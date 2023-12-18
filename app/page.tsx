@@ -5,15 +5,26 @@ import { Connection, PublicKey, Transaction, clusterApiUrl, SystemProgram, sendA
 import idl from "../idl.json";
 import crypto from 'crypto'
 import Link from 'next/link'
+import Image from "next/image";
+import docx from '../public/docx.png'
+import pdf from '../public/pdf.png'
 export default function Home() {
   const [walletKey, setWalletKey] = useState<any>(null);
   const [documents, setDocuments] = useState<any[]>([]);
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('');
+  const [description, setDescription] = useState('');
   const [file, setFile] = useState<File>();
   const ref = useRef<HTMLInputElement>(null);
   const [showAddDocumentModal, setShowAddDocumentModal] = useState(false);
 
+  function getFileExtension(fileName: any) {
+    const lastDotIndex = fileName.lastIndexOf('.');
+    if (lastDotIndex === -1 || lastDotIndex === fileName.length - 1) {
+      return '';
+    }
+    return fileName.substring(lastDotIndex + 1).toLowerCase();
+  }
   const handleAddFileClick = () => {
     setShowAddDocumentModal(true);
   };
@@ -79,7 +90,7 @@ export default function Home() {
     });
     const PROGRAM_SOLANA = new Program(
       JSON.parse(JSON.stringify(idl)),
-      new PublicKey("2Bgqzs3vwWQaXF1KTPHyzJzAM7eFC8tyx8eo7aDydtt2"),
+      new PublicKey("9mmw8L39tC2tveMZCii6bucbHJSuwuudoEC1g6Fn317G"),
       anchor_provider
     );
     const allDocuments = await PROGRAM_SOLANA.account.document.all();
@@ -94,11 +105,11 @@ export default function Home() {
     });
     const PROGRAM_SOLANA = new Program(
       JSON.parse(JSON.stringify(idl)),
-      new PublicKey("2Bgqzs3vwWQaXF1KTPHyzJzAM7eFC8tyx8eo7aDydtt2"),
+      new PublicKey("9mmw8L39tC2tveMZCii6bucbHJSuwuudoEC1g6Fn317G"),
       anchor_provider
     );
     const keyPair = web3.Keypair.generate();
-    const tx = await PROGRAM_SOLANA.methods.addDocument(new PublicKey(walletKey), title, hex, category).accounts({
+    const tx = await PROGRAM_SOLANA.methods.addDocument(new PublicKey(walletKey), title, hex, category, description, getFileExtension(file?.name)).accounts({
       document: keyPair.publicKey.toString(),
       signer: anchor_provider.publicKey.toString(),
       systemProgram: web3.SystemProgram.programId.toString(), 
@@ -235,6 +246,14 @@ export default function Home() {
                   onChange={(e) => setTitle(e.target.value)}
                   className="w-full p-2 border border-gray-300 rounded mb-2"
                 />
+                <input
+                  type="text"
+                  placeholder="Description (Max 100 characters)"
+                  maxLength={100}
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  className="w-full p-2 border border-gray-300 rounded mb-2 h-40"
+                />
                 <select
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
@@ -296,21 +315,33 @@ export default function Home() {
       </button>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        {documents.map((e) => (
-          <div key={e.publicKey} className="p-4 border rounded overflow-hidden">
-            <p className="text-lg font-bold mb-2 line-clamp-2">{e.account.owner.toString()}</p>
-            <p className="text-lg mb-2 line-clamp-2">Title: {e.account.title}</p>
-            <p className="text-lg mb-4 line-clamp-2">Category: {e.account.category}</p>
-            <p className="text-lg mb-4 line-clamp-2">SOL {(LAMPORTS_PER_SOL * 0.0008) / LAMPORTS_PER_SOL}</p>
-            <button
-              onClick={() => transferSol(e.account.owner.toString(), e.account.hashContent)}
-              className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-700"
-            >
-              Download
-            </button>
-          </div>
-        ))}
-      </div>
+          {documents.map((e) => (
+            <div key={e.publicKey} className="p-4 border rounded">
+              <p className="text-lg font-bold mb-2 line-clamp-2">{e.account.owner.toString()}</p>
+              <p className="text-3xl mb-2 line-clamp-2 text-center font-bold">{e.account.title}</p>
+              {e.account.ext === 'docx' && (
+                <div className="mb-2 flex items-center justify-center">
+                  <Image src={docx} alt="docx" width={300} height={250} />
+                </div>
+              )}
+              {e.account.ext === 'pdf' && (
+                <div className="mb-2 flex items-center justify-center">
+                  <Image src={pdf} alt="pdf" width={300} height={250} />
+                </div>
+              )}
+              <p className="text-lg mb-4 line-clamp-2">Category: {e.account.category.toUpperCase()}</p>
+              <p className="text-lg mb-4">Description: {e.account.description}</p>
+              <p className="text-lg mb-4 line-clamp-2">SOL {(LAMPORTS_PER_SOL * 0.0008) / LAMPORTS_PER_SOL}</p>
+
+              <button
+                onClick={() => transferSol(e.account.owner.toString(), e.account.hashContent + "." + e.account.ext)}
+                className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-700"
+              >
+                Download
+              </button>
+            </div>
+          ))}
+        </div>
     </main>
   );
   

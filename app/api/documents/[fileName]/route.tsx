@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import fs from 'fs';
-import * as path from 'path';
+import { storage } from "@/firebase.config";
+import { ref, getDownloadURL, getMetadata } from "firebase/storage";
 
 type Params = {
   fileName: string;
@@ -8,26 +8,20 @@ type Params = {
 
 export async function GET(request: Request, { params }: { params: Params }) {
   const requestedFileName = params.fileName;
-  const documentsDir = path.join(process.cwd(), 'public', 'documents');
+  const documentsRef = ref(storage, 'documents/' + requestedFileName);
 
   try {
-    const files = fs.readdirSync(documentsDir);
-    const matchingFile = files.find(file => file.startsWith(requestedFileName));
+    const downloadURL = await getDownloadURL(documentsRef);
+    const metadata = await getMetadata(documentsRef);
 
-    if (!matchingFile) {
-      throw new Error('File not found');
-    }
-
-    const filePath = path.join(documentsDir, matchingFile);
-    const fileStream = fs.readFileSync(filePath);
     const headers = {
-      'Content-Disposition': `attachment; filename=${matchingFile}`,
-      'Content-Type': 'application/octet-stream',
+      'Content-Disposition': `attachment; filename=${requestedFileName}`,
+      'Content-Type': metadata.contentType || 'application/octet-stream',
     };
-
-    return new NextResponse(fileStream, { status: 200, headers });
+    const fileContent = await fetch(downloadURL).then((res) => res.arrayBuffer());
+    return new NextResponse(fileContent, { status: 200, headers });
   } catch (error) {
-    console.error(`Error reading file: ${error}`);
-    return NextResponse.json({ status: 500, error: 'Error reading file.' });
+    console.error(`Error fetching file from Firebase Storage: ${error}`);
+    return NextResponse.json({ status: 500, error: 'Error fetching file.' });
   }
 }

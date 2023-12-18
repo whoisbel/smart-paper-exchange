@@ -1,6 +1,6 @@
-import { writeFile } from 'fs/promises';
 import { NextRequest, NextResponse } from 'next/server';
-import * as path from 'path';
+import { ref, uploadBytes } from 'firebase/storage';
+import { storage } from '@/firebase.config';
 export async function POST(request: NextRequest) {
   const data = await request.formData();
   const file: File | null = data.get('file') as unknown as File;
@@ -8,12 +8,9 @@ export async function POST(request: NextRequest) {
   if (!file) {
     return NextResponse.json({ success: false });
   }
-
+  const storageRef = ref(storage, 'documents/' + file.name);
   const bytes = await file.arrayBuffer();
-  const buffer = Buffer.from(bytes);
-  // const path = `./public/documents/${file.name}`;
-  const paths = path.join(process.cwd(), 'public', 'documents', `${file.name}`);
-  await writeFile(paths, buffer);
-  console.log(`open ${paths} to see the uploaded file`);
+  await uploadBytes(storageRef, bytes);
+
   return NextResponse.json({ success: true });
 }
