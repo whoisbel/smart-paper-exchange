@@ -1,5 +1,5 @@
 'use client'
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { AnchorProvider, BN, Program, getProvider, web3 } from "@coral-xyz/anchor";
 import { Connection, PublicKey, Transaction, clusterApiUrl, SystemProgram, sendAndConfirmTransaction, LAMPORTS_PER_SOL, Keypair} from "@solana/web3.js";
 import idl from "../idl.json";
@@ -8,6 +8,7 @@ import Link from 'next/link'
 import Image from "next/image";
 import docx from '../public/docx.png'
 import pdf from '../public/pdf.png'
+import sol from '../public/solana-sol-logo.png'
 export default function Home() {
   const [walletKey, setWalletKey] = useState<any>(null);
   const [documents, setDocuments] = useState<any[]>([]);
@@ -15,6 +16,7 @@ export default function Home() {
   const [category, setCategory] = useState('');
   const [description, setDescription] = useState('');
   const [file, setFile] = useState<File>();
+  const [userCategory, setUserCategory] = useState('');
   const ref = useRef<HTMLInputElement>(null);
   const [showAddDocumentModal, setShowAddDocumentModal] = useState(false);
 
@@ -96,7 +98,9 @@ export default function Home() {
     const allDocuments = await PROGRAM_SOLANA.account.document.all();
     setDocuments(allDocuments);
   };
-
+  useEffect(() => {
+    initialize();
+  }, []);
   const addDocument = async (hex: string) => {
     const {solana} = window as any;
     const connection = new Connection(clusterApiUrl("devnet"));
@@ -308,40 +312,52 @@ export default function Home() {
             </div>
           </div>
         )}
-
-      <button
-        onClick={initialize}
-        className="bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-700 mb-4"
-      >
-        View Documents
-      </button>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {documents.map((e) => (
-            <div key={e.publicKey} className="p-4 border rounded">
-              <p className="text-3xl mb-2 text-center font-bold">{e.account.title}</p>
-              {e.account.ext === 'docx' && (
-                <div className="mb-2 flex items-center justify-center">
-                  <Image src={docx} alt="docx" width={300} height={250} />
-                </div>
-              )}
-              {e.account.ext === 'pdf' && (
-                <div className="mb-2 flex items-center justify-center">
-                  <Image src={pdf} alt="pdf" width={300} height={250} />
-                </div>
-              )}
-              <p className="text-lg mb-4 line-clamp-2">Category: {e.account.category.toUpperCase()}</p>
-              <p className="text-lg mb-4">Description: {e.account.description}</p>
-              <p className="text-lg mb-4 line-clamp-2">SOL {(LAMPORTS_PER_SOL * 0.0008) / LAMPORTS_PER_SOL}</p>
-
-              <button
-                onClick={() => transferSol(e.account.owner.toString(), e.account.hashContent + "." + e.account.ext)}
-                className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-700"
-              >
-                Download
-              </button>
-            </div>
+      <div className="flex items-center justify-end">
+        <select
+          value={userCategory}
+          onChange={(e) => setUserCategory(e.target.value)}
+          className="w-max p-2 border border-gray-300 rounded mb-2"
+          required
+        >
+          <option value="">All Categories</option> 
+          {categories.map((categoryOption) => (
+            <option
+              key={categoryOption.toLowerCase()}
+              value={categoryOption.toLowerCase()}
+            >
+              {categoryOption.charAt(0).toUpperCase() + categoryOption.slice(1)}
+            </option>
           ))}
+        </select>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            {documents.filter((e) => userCategory === '' || userCategory === e.account.category.toLowerCase()).map((e) => (
+              <div key={e.publicKey} className="p-4 border rounded">
+                <p className="text-3xl mb-2 text-center font-bold">{e.account.title}</p>
+                {e.account.ext === 'docx' && (
+                  <div className="mb-2 flex items-center justify-center">
+                    <Image src={docx} alt="docx" width={300} height={250} />
+                  </div>
+                )}
+                {e.account.ext === 'pdf' && (
+                  <div className="mb-2 flex items-center justify-center">
+                    <Image src={pdf} alt="pdf" width={300} height={250} />
+                  </div>
+                )}
+                <p className="text-lg mb-4 line-clamp-2">Category: {e.account.category.toUpperCase()}</p>
+                <p className="text-lg mb-4">Description: {e.account.description}</p>
+                <p className="text-xl mb-4 flex items-center">
+                  <Image src={sol} alt="docx" width={20} height={20} />
+                  {(LAMPORTS_PER_SOL * 0.0008) / LAMPORTS_PER_SOL}
+                </p>
+                <button
+                  onClick={() => transferSol(e.account.owner.toString(), e.account.hashContent + "." + e.account.ext)}
+                  className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-700"
+                >
+                  Download
+                </button>
+              </div>
+            ))}
         </div>
     </main>
   );
