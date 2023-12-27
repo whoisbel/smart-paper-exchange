@@ -56,6 +56,7 @@ export default function Home() {
       const hex = hashSum.digest('hex');
       const data = new FormData();
       data.set('file', file, `${hex}.${extension}`);
+      await addDocument(hex);
       const res = await fetch('api/documents', {
         method: 'POST',
         body: data,
@@ -64,8 +65,6 @@ export default function Home() {
       if (!res.ok) throw new Error(await res.text());
   
       ref.current && (ref.current.value = '');
-  
-      await addDocument(hex);
       handleCloseModal()
     } catch (e) {
       console.error(e);
