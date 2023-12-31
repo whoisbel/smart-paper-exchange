@@ -1,4 +1,4 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+Smart Paper Exchange (SPEX) is a cutting-edge platform designed to revolutionize how academic papers are shared and accessed. We leverage blockchain technology, specifically on the Solana blockchain, to provide users with a secure, transparent, and efficient environment for knowledge exchange.
 
 ## Getting Started
 
